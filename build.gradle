@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation('junit:junit:4.13.2')
+    testImplementation('org.junit.jupiter:junit-jupiter:5.12.2')
+    testImplementation('org.junit.platform:junit-platform-suite:1.12.2')
+    testImplementation('org.junit.vintage:junit-vintage-engine:5.12.2') {
+        because('allows JUnit 3 and JUnit 4 tests to run')
+    }
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching('com.kylemoore.OldSchoolSuite')
+    }
+
+    def mem = '512m'
+    minHeapSize = mem
+    maxHeapSize = minHeapSize
+
+    maxParallelForks = 1
+
+    develocity.testRetry {
+        maxRetries = 20
+//        failOnPassedAfterRetry = true
+    }
+}
